@@ -1,5 +1,6 @@
 <?php
     include('scripts.php');
+    include('database.php');
 ?>
 
 <!DOCTYPE html>
@@ -267,6 +268,7 @@
 							<!-- TO DO TASKS HERE -->
 							<?php
 								//PHP CODE HERE
+								getTasks(1)
 								//DATA FROM getTasks() FUNCTION
 							?>
 						</div>
@@ -287,6 +289,7 @@
 							<!-- IN PROGRESS TASKS HERE -->
 							<?php
 								//PHP CODE HERE
+								getTasks(2)
 								//DATA FROM getTasks() FUNCTION
 							?>
 						</div>
@@ -307,6 +310,7 @@
 							<!-- DONE TASKS HERE -->
 							<?php
 								//PHP CODE HERE
+								getTasks(3)
 								//DATA FROM getTasks() FUNCTION
 							?>
 						</div>
@@ -334,20 +338,20 @@
 					</div>
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
-							<input type="hidden" id="task-id">
+							<input type="hidden" id="task-id<?php echo $row['Id'];?>">
 							<div class="mb-3">
 								<label class="form-label">Title</label>
-								<input type="text" class="form-control" id="task-title"/>
+								<input type="text" name="task-title" class="form-control" id="task-title"/>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
 								<div class="ms-3">
 									<div class="form-check mb-1">
-										<input class="form-check-input" name="task-type" type="radio" value="Feature" id="task-type-feature"/>
+										<input class="form-check-input" name="task-type" type="radio" value="1" id="task-type-feature"/>
 										<label class="form-check-label" for="task-type-feature">Feature</label>
 									</div>
 									<div class="form-check">
-										<input class="form-check-input" name="task-type" type="radio" value="Bug" id="task-type-bug"/>
+										<input class="form-check-input" name="task-type" type="radio" value="2" id="task-type-bug"/>
 										<label class="form-check-label" for="task-type-bug">Bug</label>
 									</div>
 								</div>
@@ -355,30 +359,30 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Priority</label>
-								<select class="form-select" id="task-priority">
+								<select class="form-select" id="task-priority" name="task-priority">
 									<option value="">Please select</option>
-									<option value="Low">Low</option>
-									<option value="Medium">Medium</option>
-									<option value="High">High</option>
-									<option value="Critical">Critical</option>
+									<option value="1">Low</option>
+									<option value="2">Medium</option>
+									<option value="3">High</option>
+									<option value="4">Critical</option>
 								</select>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Status</label>
-								<select class="form-select" id="task-status">
+								<select class="form-select" id="task-status" name="task-status">
 									<option value="">Please select</option>
-									<option value="To Do">To Do</option>
-									<option value="In Progress">In Progress</option>
-									<option value="Done">Done</option>
+									<option value="1">To Do</option>
+									<option value="2">In Progress</option>
+									<option value="3">Done</option>
 								</select>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Date</label>
-								<input type="date" class="form-control" id="task-date"/>
+								<input type="date" class="form-control" id="task-date" name="task-date"/>
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="10" id="task-description"></textarea>
+								<textarea class="form-control" rows="10" id="task-description" name="task-description"></textarea>
 							</div>
 						
 					</div>
