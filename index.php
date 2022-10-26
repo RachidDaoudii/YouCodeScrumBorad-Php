@@ -1,6 +1,7 @@
 <?php
     include('scripts.php');
     include('database.php');
+    include('modal.php');
 ?>
 
 <!DOCTYPE html>
@@ -16,17 +17,19 @@
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
 	<link href="assets/css/default/app.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
 	<!-- ================== END core-css ================== -->
 </head>
 <body>
 	<!-- BEGIN #loader -->
-	<div id="loader" class="app-loader">
+	<!-- <div id="loader" class="app-loader">
 		<span class="spinner"></span>
-	</div>
+	</div> -->
 	<!-- END #loader -->
 
 	<!-- BEGIN #app -->
 	<div id="app" class="app app-header-fixed app-sidebar-fixed">
+	
 		<!-- BEGIN #header -->
 		<div id="header" class="app-header">
 			<!-- BEGIN navbar-header -->
@@ -328,7 +331,7 @@
 	<!-- END #app -->
 	
 	<!-- TASK MODAL -->
-	<div class="modal fade" id="modal-task">
+	<div class="modal fade" id="modal-task<?php echo $element['Id'] ?>">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action="scripts.php" method="POST" id="form-task">
@@ -338,10 +341,11 @@
 					</div>
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
-							<input type="hidden" id="task-id<?php echo $row['Id'];?>">
+							<input type="hidden" id="task-id" value="">
+							<?php  //echo $_GET['id'] ?>
 							<div class="mb-3">
 								<label class="form-label">Title</label>
-								<input type="text" name="task-title" class="form-control" id="task-title"/>
+								<input type="text" name="task-title" class="form-control" id="task_title" value="<?php echo $element['Title'] ?>"/>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
@@ -359,7 +363,7 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Priority</label>
-								<select class="form-select" id="task-priority" name="task-priority">
+								<select class="form-select" id="task_priority" name="task-priority">
 									<option value="">Please select</option>
 									<option value="1">Low</option>
 									<option value="2">Medium</option>
@@ -369,7 +373,7 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Status</label>
-								<select class="form-select" id="task-status" name="task-status">
+								<select class="form-select" id="task_status" name="task-status">
 									<option value="">Please select</option>
 									<option value="1">To Do</option>
 									<option value="2">In Progress</option>
@@ -378,11 +382,11 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Date</label>
-								<input type="date" class="form-control" id="task-date" name="task-date"/>
+								<input type="date" class="form-control" id="task_date" name="task-date"/>
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="10" id="task-description" name="task-description"></textarea>
+								<textarea class="form-control" rows="10" id="task_description" name="task-description"></textarea>
 							</div>
 						
 					</div>
