@@ -20,12 +20,10 @@
         $requite = "SELECT * FROM `tasks` WHERE Status_id = $column";
         $sql = mysqli_query($connection,$requite);
         while ($element = mysqli_fetch_assoc($sql)){?>
-            <?php include('modal.php');?>
-            <button class="w-100 bg-white border-0 border-secondary border-bottom d-flex dd" id="<?php echo $element['Id'] ?>" onclick="rern(<?php echo $element['Id'] ?>)" name="edit" data-bs-toggle="modal" data-bs-target="#modal_task">
+            <button status="<?php echo $element['Status_id'] ?>" class="w-100 bg-white border-0 border-secondary border-bottom d-flex dd" id="<?php echo $element['Id'] ?>" onclick="rern(<?php echo $element['Id'] ?>)" name="edit" data-bs-toggle="modal" data-bs-target="#modal_task">
                 <div class="fs-2">
                     <i class='bx <?php echo ($element['Status_id'] == 1)? "bx-loader-alt" : (($element['Status_id'] == 2)? "bx-help-circle" : "bx-check-circle")?>' style='color:#00d68a'></i> 
                 </div>
-                <!-- <input type="hidden" name="id" value="<?php echo $element['Id'] ?>"> -->
                 <div class="p-2 text-start">
                     <div class="fw-bold" id="titre" data="<?php echo $element['Title'] ?>"><?php echo $element['Title'] ?></div>
                     <div class="pt-1">

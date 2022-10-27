@@ -225,7 +225,7 @@
 				</div>
 				
 				<div class="ms-auto">
-				<a href="#modal-task" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
+				<a href="#modal_task" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
 				</div>
 			</div>
 			
@@ -243,7 +243,6 @@
 				<div class="ms-md-4 mt-md-0 mt-2"><i class="fa fa-users-cog fa-fw me-1 text-dark text-opacity-50"></i> 52 participant</div>
 				<div class="ms-md-4 mt-md-0 mt-2"><i class="far fa-clock fa-fw me-1 text-dark text-opacity-50"></i> 14 day(s)</div>
 			</div>
-
 			<?php if (isset($_SESSION['message'])): ?>
 				<div class="alert alert-green alert-dismissible fade show">
 				<strong>Success!</strong>
@@ -344,7 +343,7 @@
 			<div class="modal-content">
 				<form action="scripts.php" method="POST" id="form-task">
 					<div class="modal-header">
-						<h5 class="modal-title">Add Task</h5>
+						<h5 class="modal-title" id="mode_modal">Add Task</h5>
 						<a href="#" class="btn-close" data-bs-dismiss="modal"></a>
 					</div>
 					<div class="modal-body">
