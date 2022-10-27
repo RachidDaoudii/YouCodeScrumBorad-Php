@@ -21,20 +21,20 @@
         $sql = mysqli_query($connection,$requite);
         while ($element = mysqli_fetch_assoc($sql)){?>
             <?php include('modal.php');?>
-            <button class="w-100 bg-white border-0 border-secondary border-bottom d-flex" name="edit" data-bs-toggle="modal" data-bs-target="#update<?php echo $element['Id'] ?>">
+            <button class="w-100 bg-white border-0 border-secondary border-bottom d-flex dd" id="<?php echo $element['Id'] ?>" onclick="rern(<?php echo $element['Id'] ?>)" name="edit" data-bs-toggle="modal" data-bs-target="#modal_task">
                 <div class="fs-2">
                     <i class='bx <?php echo ($element['Status_id'] == 1)? "bx-loader-alt" : (($element['Status_id'] == 2)? "bx-help-circle" : "bx-check-circle")?>' style='color:#00d68a'></i> 
                 </div>
-                <input type="hidden" name="id" value="<?php echo $element['Id'] ?>">
+                <!-- <input type="hidden" name="id" value="<?php echo $element['Id'] ?>"> -->
                 <div class="p-2 text-start">
-                    <div class="fw-bold" id="titre"><?php echo $element['Title'] ?></div>
+                    <div class="fw-bold" id="titre" data="<?php echo $element['Title'] ?>"><?php echo $element['Title'] ?></div>
                     <div class="pt-1">
-                        <div class=" text-secondary">#<?php echo $count ?> created in <?php echo $element['Date'] ?></div>
-                        <div class="text-truncate" title=""><?php echo substr($element['Description'],0,50); ?></div>
+                        <div class=" text-secondary" data="<?php echo $element['Date'] ?>">#<?php echo $count ?> created in <?php echo $element['Date'] ?></div>
+                        <div class="text-truncate" title="" data="<?php echo $element['Description'] ?>"><?php echo substr($element['Description'],0,50); ?></div>
                     </div>
                     <div class="pt-1">
-                        <span class="p-1 btn btn-primary border border-0"><?php echo ($element['Priority_id'] == 1)?"Low" :( ($element['Priority_id'] == 2)?"Medium":(($element['Priority_id']==3)?"High":"Critical" ))?></span>
-                        <span class="p-1 btn btn-secondary border border-0 text-black"><?php echo ($element['Type_id']==1)?"Feature":"Bug" ?></span>
+                        <span class="p-1 btn btn-primary border border-0" data="<?php echo $element['Priority_id'] ?>"><?php echo ($element['Priority_id'] == 1)?"Low" :( ($element['Priority_id'] == 2)?"Medium":(($element['Priority_id']==3)?"High":"Critical" ))?></span>
+                        <span class="p-1 btn btn-secondary border border-0 text-black" data="<?php echo $element['Type_id'] ?>"><?php echo ($element['Type_id']==1)?"Feature":"Bug" ?></span>
                     </div>
                 </div>
             </button>

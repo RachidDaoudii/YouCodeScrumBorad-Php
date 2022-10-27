@@ -69,11 +69,11 @@ include('database.php');
                             <label for="description" class="from-label fw-bold">Description</label>
                             <textarea class="form-control" name="Description" id="description" rows="10"><?php echo $element['Description']?></textarea>
                         </div>
-                        <div class="modal-footer" id="modal-footer">
-                            <button type="submit" class="btn btn-secondary text-black" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="delete" class="btn btn-red" data-bs-dismiss="modal">Delete</button>
-                            <button type="submit" name="btn-update"  class="btn btn-primary" data-bs-dismiss="modal">Update</button>
-                        </div>
+                        <div class="modal-footer">
+						<a href="#" class="btn btn-white" data-bs-dismiss="modal">Cancel</a>
+						<button type="submit" name="delete" class="btn btn-danger task-action-btn" id="task-delete-btn">Delete</a>
+						<button type="submit" name="update" class="btn btn-warning task-action-btn" id="task-update-btn">Update</a>
+					</div>
                     </form>
                 </div>
                 
@@ -82,6 +82,27 @@ include('database.php');
         </div>
         <!-- Modal -->
 <?php
-
-
 ?>
+
+<script>
+    // function hh(){
+    //     var title = docement.document.getElementById('Title');
+    // var Type = docement.document.getElementById('feature');
+    // var priority = docement.document.getElementById('Priority');
+    // var status = docement.document.getElementById('status');
+    // var date = docement.document.getElementById('date');
+    // var description = docement.document.getElementById('descrition');
+    // var data = [];
+    // var tasks = {
+    //     Title : title.value,
+    //     Type : Type.value,
+    //     Priority : priority.value,
+    //     Status : stattus.value,
+    //     Date : date.value,
+    //     Description : description.value
+    // };
+    // data.push(tasks);
+    // console.log(data);
+    // }
+    
+</script>

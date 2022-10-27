@@ -322,16 +322,24 @@
 			</div>
 		</div>
 		<!-- END #content -->
-		
-		
 		<!-- BEGIN scroll-top-btn -->
 		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top" data-toggle="scroll-to-top"><i class="fa fa-angle-up"></i></a>
 		<!-- END scroll-top-btn -->
 	</div>
 	<!-- END #app -->
-	
+	<?php  echo $_GET['id'];
+		if(isset($_GET['id'])){
+			$id = $_GET['id'];
+			$sql = "SELECT * FROM `tasks` WHERE id=?";
+			$stmt = $connection->prepare($sql); 
+			$stmt->bind_param("i", $id);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$row = $result->fetch_assoc();
+		}
+	?>
 	<!-- TASK MODAL -->
-	<div class="modal fade" id="modal-task<?php echo $element['Id'] ?>">
+	<div class="modal fixed" id="modal_task">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action="scripts.php" method="POST" id="form-task">
@@ -341,21 +349,20 @@
 					</div>
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
-							<input type="hidden" id="task-id" value="">
-							<?php  //echo $_GET['id'] ?>
+							<input type="hidden" id="task_id" value="<?php echo $row['Id'] ?>">
 							<div class="mb-3">
 								<label class="form-label">Title</label>
-								<input type="text" name="task-title" class="form-control" id="task_title" value="<?php echo $element['Title'] ?>"/>
+								<input type="text" name="task-title" d class="form-control" id="task_title" value=""/>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
 								<div class="ms-3">
 									<div class="form-check mb-1">
-										<input class="form-check-input" name="task-type" type="radio" value="1" id="task-type-feature"/>
+										<input class="form-check-input" name="task-type" type="radio" value="1" id="task_type_feature"/>
 										<label class="form-check-label" for="task-type-feature">Feature</label>
 									</div>
 									<div class="form-check">
-										<input class="form-check-input" name="task-type" type="radio" value="2" id="task-type-bug"/>
+										<input class="form-check-input" name="task-type" type="radio" value="2" id="task_type_bug"/>
 										<label class="form-check-label" for="task-type-bug">Bug</label>
 									</div>
 								</div>
@@ -382,11 +389,12 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Date</label>
-								<input type="date" class="form-control" id="task_date" name="task-date"/>
+								<input type="date" class="form-control" id="task_date" name="task-date" value=""/>
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="10" id="task_description" name="task-description"></textarea>
+								<textarea class="form-control" rows="10" id="task_description" name="task-description">
+								</textarea>
 							</div>
 						
 					</div>
@@ -402,13 +410,9 @@
 	</div>
 	
 	<!-- ================== BEGIN core-js ================== -->
+	<script src="scripts.js"></script>
 	<script src="assets/js/vendor.min.js"></script>
 	<script src="assets/js/app.min.js"></script>
 	<!-- ================== END core-js ================== -->
-	<script src="scripts.js"></script>
-
-	<script>
-		//reloadTasks();
-	</script>
 </body>
 </html>
