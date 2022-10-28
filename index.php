@@ -2,6 +2,7 @@
     include('scripts.php');
     include('database.php');
     include('modal.php');
+	global $connection;
 ?>
 
 <!DOCTYPE html>
@@ -244,11 +245,21 @@
 				<div class="ms-md-4 mt-md-0 mt-2"><i class="far fa-clock fa-fw me-1 text-dark text-opacity-50"></i> 14 day(s)</div>
 			</div>
 			<?php if (isset($_SESSION['message'])): ?>
-				<div class="alert alert-green alert-dismissible fade show">
+				<div class="alert alert-green alert-dismissible fade show" id="msg">
 				<strong>Success!</strong>
 					<?php 
 						echo $_SESSION['message']; 
 						unset($_SESSION['message']);
+					?>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
+				</div>
+			<?php endif ?>
+				<?php if(isset($_SESSION['erreur'])):  ?>
+					<div class="alert alert-red alert-dismissible fade show">
+					<strong>Success!</strong>
+					<?php 
+						echo $_SESSION['erreur']; 
+						unset($_SESSION['erreur']);
 					?>
 					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
 				</div>
@@ -258,7 +269,12 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">To do (<span id="to-do-tasks-count">0</span>)</h4>
+							<?php
+								$sql ="SELECT count(*) as Count FROM `tasks` where Status_id ='1'";
+								$res = mysqli_query($connection,$sql);
+								$nbr = mysqli_fetch_assoc($res);
+							?>
+							<h4 class="panel-title">To do (<span id="to-do-tasks-count"><?php echo $nbr['Count']; ?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -279,7 +295,12 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">In Progress (<span id="in-progress-tasks-count">0</span>)</h4>
+						<?php 
+								$sql="SELECT count(*) AS COUNT FROM `tasks` WHERE Status_id = '2'";
+								$res = mysqli_query($connection,$sql);
+								$nbr= mysqli_fetch_assoc($res);
+							?>
+							<h4 class="panel-title">In Progress (<span id="in-progress-tasks-count"><?php echo $nbr['COUNT']?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -300,7 +321,12 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">Done (<span id="done-tasks-count">0</span>)</h4>
+							<?php 
+								$sql="SELECT count(*) AS COUNT FROM `tasks` WHERE Status_id = '3'";
+								$res = mysqli_query($connection,$sql);
+								$nbr= mysqli_fetch_assoc($res);
+							?>
+							<h4 class="panel-title">Done (<span id="done-tasks-count"><?php echo $nbr['COUNT']?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -326,16 +352,16 @@
 		<!-- END scroll-top-btn -->
 	</div>
 	<!-- END #app -->
-	<?php  echo $_GET['id'];
-		if(isset($_GET['id'])){
-			$id = $_GET['id'];
-			$sql = "SELECT * FROM `tasks` WHERE id=?";
-			$stmt = $connection->prepare($sql); 
-			$stmt->bind_param("i", $id);
-			$stmt->execute();
-			$result = $stmt->get_result();
-			$row = $result->fetch_assoc();
-		}
+	<?php  //echo $_GET['id'];
+		// if(isset($_GET['id'])){
+		// 	$id = $_GET['id'];
+		// 	$sql = "SELECT * FROM `tasks` WHERE id=?";
+		// 	$stmt = $connection->prepare($sql); 
+		// 	$stmt->bind_param("i", $id);
+		// 	$stmt->execute();
+		// 	$result = $stmt->get_result();
+		// 	$row = $result->fetch_assoc();
+		// }
 	?>
 	<!-- TASK MODAL -->
 	<div class="modal fixed" id="modal_task">
@@ -348,7 +374,7 @@
 					</div>
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
-							<input type="hidden" id="task_id" value="<?php echo $row['Id'] ?>">
+							<input type="hidden" id="task_id" value="" name="id">
 							<div class="mb-3">
 								<label class="form-label">Title</label>
 								<input type="text" name="task-title" d class="form-control" id="task_title" value=""/>
@@ -365,12 +391,14 @@
 										<label class="form-check-label" for="task-type-bug">Bug</label>
 									</div>
 								</div>
-								
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Priority</label>
 								<select class="form-select" id="task_priority" name="task-priority">
 									<option value="">Please select</option>
+									<?php 
+									
+									?>
 									<option value="1">Low</option>
 									<option value="2">Medium</option>
 									<option value="3">High</option>
@@ -381,9 +409,17 @@
 								<label class="form-label">Status</label>
 								<select class="form-select" id="task_status" name="task-status">
 									<option value="">Please select</option>
-									<option value="1">To Do</option>
+									<?php
+										$sql ="SELECT * FROM `statuses`";
+										$res = mysqli_query($connection,$sql);
+										while ($row = mysqli_fetch_assoc($res)) { ?>
+										<option value="<?php echo $row['Id']?>"><?php echo $row['Name']?></option>
+									<?php
+										}
+									?>
+									<!-- 									
 									<option value="2">In Progress</option>
-									<option value="3">Done</option>
+									<option value="3">Done</option> -->
 								</select>
 							</div>
 							<div class="mb-3">
@@ -392,10 +428,8 @@
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="10" id="task_description" name="task-description">
-								</textarea>
+								<textarea class="form-control" rows="10" id="task_description" name="task-description"></textarea>
 							</div>
-						
 					</div>
 					<div class="modal-footer">
 						<a href="#" class="btn btn-white" data-bs-dismiss="modal">Cancel</a>
