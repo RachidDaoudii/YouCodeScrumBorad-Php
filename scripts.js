@@ -14,15 +14,16 @@ function rern(id){
     document.getElementById('task_description').value = description;
     document.getElementById('task_id').value = id;
     
-    document.getElementById('task-save-btn').style.display='none';
+    // document.getElementById('task-save-btn').style.display='none';
     document.getElementById('mode_modal').innerHTML='Update Task';
 }
 
 
 var btnTaks = document.getElementById('modal_task');
-btnTaks.addEventListener('click',function(){
+btnTaks.addEventListener("click", function(){
+
     document.getElementById('mode_modal').innerHTML='Add Tsak';
-    document.getElementById('form-task').forms.reste();
+    document.getElementById('form-task').forms.reset();
     document.getElementById('task-save-btn').style.display='block';
     document.getElementById('task-delete-btn').style.display='none';
     document.getElementById('task-update-btn').style.display='none';

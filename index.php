@@ -1,7 +1,6 @@
 <?php
     include('scripts.php');
     include('database.php');
-    include('modal.php');
 	global $connection;
 ?>
 
@@ -17,6 +16,7 @@
 	<!-- ================== BEGIN core-css ================== -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
+	<link href="assets/css/parsley.css" rel="stylesheet" />
 	<link href="assets/css/default/app.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
 	<!-- ================== END core-css ================== -->
@@ -270,11 +270,11 @@
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
 							<?php
-								$sql ="SELECT count(*) as Count FROM `tasks` where Status_id ='1'";
-								$res = mysqli_query($connection,$sql);
-								$nbr = mysqli_fetch_assoc($res);
+								// $sql ="SELECT count(*) as Count FROM `tasks` where Status_id ='1'";
+								// $res = mysqli_query($connection,$sql);
+								// $nbr = mysqli_fetch_assoc($res);
 							?>
-							<h4 class="panel-title">To do (<span id="to-do-tasks-count"><?php echo $nbr['Count']; ?></span>)</h4>
+							<h4 class="panel-title">To do (<span id="to-do-tasks-count"><?php Counts(1)?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -296,11 +296,11 @@
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
 						<?php 
-								$sql="SELECT count(*) AS COUNT FROM `tasks` WHERE Status_id = '2'";
-								$res = mysqli_query($connection,$sql);
-								$nbr= mysqli_fetch_assoc($res);
+								// $sql="SELECT count(*) AS COUNT FROM `tasks` WHERE Status_id = '2'";
+								// $res = mysqli_query($connection,$sql);
+								// $nbr= mysqli_fetch_assoc($res);
 							?>
-							<h4 class="panel-title">In Progress (<span id="in-progress-tasks-count"><?php echo $nbr['COUNT']?></span>)</h4>
+							<h4 class="panel-title">In Progress (<span id="in-progress-tasks-count"><?php Counts(2)?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -322,11 +322,11 @@
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
 							<?php 
-								$sql="SELECT count(*) AS COUNT FROM `tasks` WHERE Status_id = '3'";
-								$res = mysqli_query($connection,$sql);
-								$nbr= mysqli_fetch_assoc($res);
+								// $sql="SELECT count(*) AS COUNT FROM `tasks` WHERE Status_id = '3'";
+								// $res = mysqli_query($connection,$sql);
+								// $nbr= mysqli_fetch_assoc($res);
 							?>
-							<h4 class="panel-title">Done (<span id="done-tasks-count"><?php echo $nbr['COUNT']?></span>)</h4>
+							<h4 class="panel-title">Done (<span id="done-tasks-count"><?php Counts(3)?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -352,17 +352,6 @@
 		<!-- END scroll-top-btn -->
 	</div>
 	<!-- END #app -->
-	<?php  //echo $_GET['id'];
-		// if(isset($_GET['id'])){
-		// 	$id = $_GET['id'];
-		// 	$sql = "SELECT * FROM `tasks` WHERE id=?";
-		// 	$stmt = $connection->prepare($sql); 
-		// 	$stmt->bind_param("i", $id);
-		// 	$stmt->execute();
-		// 	$result = $stmt->get_result();
-		// 	$row = $result->fetch_assoc();
-		// }
-	?>
 	<!-- TASK MODAL -->
 	<div class="modal fixed" id="modal_task">
 		<div class="modal-dialog">
@@ -377,46 +366,38 @@
 							<input type="hidden" id="task_id" value="" name="id">
 							<div class="mb-3">
 								<label class="form-label">Title</label>
-								<input type="text" name="task-title" d class="form-control" id="task_title" value=""/>
+								<input type="text" name="task-title" class="form-control" id="task_title" value="" required="" placeholder="Title" data-parsley-patter="^[a-zA-Z]{4}+$" data-parsley-trigger="keyup" />
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
 								<div class="ms-3">
-									<div class="form-check mb-1">
-										<input class="form-check-input" name="task-type" type="radio" value="1" id="task_type_feature"/>
+								<?php Types() ?>
+									<!-- <div class="form-check mb-1">
+										<input class="form-check-input" name="task-type" type="radio" value="1" id="task_type_feature" required data-parsley-trigger="keyup"/>
 										<label class="form-check-label" for="task-type-feature">Feature</label>
 									</div>
 									<div class="form-check">
-										<input class="form-check-input" name="task-type" type="radio" value="2" id="task_type_bug"/>
+										<input class="form-check-input" required name="task-type" type="radio" value="2" id="task_type_bug" data-parsley-trigger="keyup"/>
 										<label class="form-check-label" for="task-type-bug">Bug</label>
-									</div>
+									</div> -->
 								</div>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Priority</label>
-								<select class="form-select" id="task_priority" name="task-priority">
+								<select class="form-select" id="task_priority" name="task-priority" required="" data-parsley-trigger="keyup">
 									<option value="">Please select</option>
-									<?php 
-									
-									?>
-									<option value="1">Low</option>
+									<?php Select('priorities')?>
+									<!-- <option value="1">Low</option>
 									<option value="2">Medium</option>
 									<option value="3">High</option>
-									<option value="4">Critical</option>
+									<option value="4">Critical</option> -->
 								</select>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Status</label>
-								<select class="form-select" id="task_status" name="task-status">
+								<select class="form-select" id="task_status" name="task-status" required="" data-parsley-trigger="keyup">
 									<option value="">Please select</option>
-									<?php
-										$sql ="SELECT * FROM `statuses`";
-										$res = mysqli_query($connection,$sql);
-										while ($row = mysqli_fetch_assoc($res)) { ?>
-										<option value="<?php echo $row['Id']?>"><?php echo $row['Name']?></option>
-									<?php
-										}
-									?>
+									<?php Select('statuses') ?>
 									<!-- 									
 									<option value="2">In Progress</option>
 									<option value="3">Done</option> -->
@@ -424,11 +405,11 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Date</label>
-								<input type="date" class="form-control" id="task_date" name="task-date" value=""/>
+								<input type="date" class="form-control" id="task_date" name="task-date" value="" required="" data-parsley-trigger="keyup"/>
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="10" id="task_description" name="task-description"></textarea>
+								<textarea class="form-control" rows="10" id="task_description" name="task-description" data-parsley-patter="^[a-zA-Z]+$" required="" data-parsley-trigger="keyup" data-parsley-minlength="40"></textarea>
 							</div>
 					</div>
 					<div class="modal-footer">
@@ -446,6 +427,8 @@
 	<script src="scripts.js"></script>
 	<script src="assets/js/vendor.min.js"></script>
 	<script src="assets/js/app.min.js"></script>
+	<script src="assets/js/parsley.js"></script>
+	<script src="https://parsleyjs.org/dist/parsley.js"></script>
 	<!-- ================== END core-js ================== -->
 </body>
 </html>
