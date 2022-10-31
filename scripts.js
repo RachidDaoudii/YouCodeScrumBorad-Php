@@ -1,31 +1,40 @@
+//function return task et afficher les values sur modal
 function rern(id){
-    var titile = document.getElementById(id).children[1].children[0].getAttribute('data')
-    var types = document.getElementById(id).children[1].children[2].children[1].getAttribute('data')
-    var priority = document.getElementById(id).children[1].children[2].children[0].getAttribute('data')
-    var status = document.getElementById(id).getAttribute('status')
-    var date = document.getElementById(id).children[1].children[1].children[0].getAttribute('data')
-    var description = document.getElementById(id).children[1].children[1].children[1].getAttribute('data')
-    
+    //return les values attribute
+    let titile = document.getElementById(id).children[1].children[0].getAttribute('data')
+    let types = document.getElementById(id).children[1].children[2].children[1].getAttribute('data')
+    let priority = document.getElementById(id).children[1].children[2].children[0].getAttribute('data')
+    let status = document.getElementById(id).getAttribute('status')
+    let date = document.getElementById(id).children[1].children[1].children[0].getAttribute('data')
+    let description = document.getElementById(id).children[1].children[1].children[1].getAttribute('data')
+    //rempliar les inputs de modal
     document.getElementById('task_title').value = titile;
-    document.getElementById('task_type_feature').checked = types;
+    let type_inputs = document.querySelectorAll('input[type="radio"]');
+    for(t of type_inputs){
+        if(t.value == types){
+            t.checked = true;
+        }
+    }
     document.getElementById('task_priority').value = priority;
     document.getElementById('task_status').value = status;
     document.getElementById('task_date').value = date;
     document.getElementById('task_description').value = description;
     document.getElementById('task_id').value = id;
-    
-    // document.getElementById('task-save-btn').style.display='none';
-    document.getElementById('mode_modal').innerHTML='Update Task';
 }
-
-
-var btnTaks = document.getElementById('modal_task');
-btnTaks.addEventListener("click", function(){
-
-    document.getElementById('mode_modal').innerHTML='Add Tsak';
-    document.getElementById('form-task').forms.reset();
-    document.getElementById('task-save-btn').style.display='block';
-    document.getElementById('task-delete-btn').style.display='none';
-    document.getElementById('task-update-btn').style.display='none';
+//reset form modal et change mode de modal (Add task -> Update task)
+let rest = document.getElementById('add');
+rest.addEventListener('click',function(){
+    document.getElementById('form_task').reset();
+    document.getElementById('mode_modal').innerText="Add Task";    
 })
+
+let btnUpdate =document.querySelector('.btnUpdate');
+btnUpdate.addEventListener('click',function (){
+    document.getElementById('mode_modal').innerText="Update Task";
+})
+
+
+
+
+
 

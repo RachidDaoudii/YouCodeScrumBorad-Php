@@ -1,7 +1,7 @@
 <?php
     //INCLUDE DATABASE FILE
     include('database.php');
-    
+
     //SESSSION IS A WAY TO STORE DATA TO BE USED ACROSS MULTIPLE PAGES
     session_start();
 
@@ -14,14 +14,13 @@
 
     function getTasks($column)
     {
-        global $connection;
         //CODE HERE
+        global $connection;
         //SQL SELECT
-        $requite = "SELECT types.Name as NameTypes ,priorities.Name as NamePriority, statuses.Name AS NameStatus ,tasks.* FROM tasks ,types ,priorities , statuses WHERE tasks.Type_id = types.Id and tasks.Priority_id = priorities.Id and tasks.Status_id = statuses.Id and tasks.Status_id= $column";
-        // $requite = "SELECT * FROM tasks where tasks.Status_id= $column";
+        $requite = "SELECT types.Name as NameTypes ,priorites.Name as NamePriority, statuses.Name AS NameStatus ,tasks.* FROM tasks ,types ,priorites , statuses WHERE tasks.Type_id = types.Id and tasks.Priority_id = priorites.Id and tasks.Status_id = statuses.Id and tasks.Status_id= $column ORDER BY tasks.Id ASC";
         $sql = mysqli_query($connection,$requite);
         while ($element = mysqli_fetch_assoc($sql)){?>
-            <button status="<?php echo $element['Status_id'] ?>" class="w-100 bg-white border-0 border-secondary border-bottom d-flex dd" id="<?php echo $element['Id'] ?>" onclick="rern(<?php echo $element['Id'] ?>)" name="edit" data-bs-toggle="modal" data-bs-target="#modal_task">
+            <button status="<?php echo $element['Status_id'] ?>" class="w-100 bg-white border-0 border-secondary border-bottom d-flex btnUpdate" id="<?php echo $element['Id'] ?>" onclick="rern(<?php echo $element['Id'] ?>)" data-bs-toggle="modal" data-bs-target="#modal_task">
                 <div class="fs-2">
                     <i class='bx <?php echo ($element['Status_id'] == 1)? "bx-help-circle" : (($element['Status_id'] == 2)? "bx-loader-alt" : "bx-check-circle")?>' style='color:#00d68a'></i> 
                 </div>
@@ -29,7 +28,7 @@
                     <div class="fw-bold" id="titre" data="<?php echo $element['Title'] ?>"><?php echo $element['Title'] ?></div>
                     <div class="pt-1">
                         <div class=" text-secondary" data="<?php echo $element['Date'] ?>">#<?php echo $element['Id'] ?> created in <?php echo $element['Date'] ?></div>
-                        <div class="text-truncate" title="" data="<?php echo $element['Description'] ?>"><?php echo substr($element['Description'],0,50).'...'; ?></div>
+                        <div class="text-truncate" title="" data="<?php echo $element['Description'] ?>"><?php echo substr($element['Description'],0,40).'...'; ?></div>
                     </div>
                     <div class="pt-1">
                         <span class="p-1 btn btn-primary border border-0" data="<?php echo $element['Priority_id'] ?>"><?php echo $element['NamePriority']?></span>
@@ -40,57 +39,67 @@
             <?php 
         } 
         // echo "Fetch all tasks";
-        ?>
-        
-        <?php
     }
 
+    //function Validation form modal 
     function Validation($input){
+        //Supprime les espaces
         $input = trim($input);
+        //Supprimer quote string (\n \t \)
         $input = stripcslashes($input);
+        //Convertit les balise html en string
         $input = htmlspecialchars($input);
         return $input;
     }
 
-    
     function saveTask()
     {
         global $connection;
         //CODE HERE
-
-        $Title = Validation($_POST['task-title']);
-        $Type = $_POST['task-type'];
-        $Priority = $_POST['task-priority'];
-        $Status = $_POST['task-status'];
-        $Date = $_POST['task-date'];
-        $Description = Validation($_POST['task-description']);
-        //SQL INSERT
-        $requite = "INSERT INTO `tasks`(`Title`, `Type_id`, `Priority_id`, `Status_id`,`Date`, `Description`) VALUES ('$Title','$Type','$Priority','$Status','$Date','$Description')";
-        $sql = mysqli_query($connection,$requite);
-        $_SESSION['message'] = "Task has been added successfully !";
-		header('location: index.php');
-    }
-
-    function updateTask()
-    {
-        global $connection;
-        //CODE HERE
-        if(isset($_POST['id'])){
-            $id = $_POST['id'];
+        if(empty($_POST['task-title']) || empty($_POST['task-type']) || empty($_POST['task-priority']) || empty($_POST['task-status']) || empty($_POST['task-date']) || empty($_POST['task-description'])){
+            $_SESSION['erreur'] = "Task Not Add !!! All is required !";
+            header('location: index.php');
+        }else{
             $Title = Validation($_POST['task-title']);
             $Type = $_POST['task-type'];
             $Priority = $_POST['task-priority'];
             $Status = $_POST['task-status'];
             $Date = $_POST['task-date'];
             $Description = Validation($_POST['task-description']);
-            //SQL UPDATE
-            $sql = "UPDATE `tasks` SET `Title` = '$Title' ,`Type_id` = '$Type' ,`Priority_id` = '$Priority',`Status_id`= '$Status' ,`Date` = '$Date' ,`Description` = '$Description'  WHERE Id = $id";
-            $res = mysqli_query($connection,$sql); 
-            $_SESSION['message'] = "Task has been updated successfully !";
+            //SQL INSERT
+            $requite = "INSERT INTO `tasks`(`Title`, `Type_id`, `Priority_id`, `Status_id`,`Date`, `Description`) VALUES ('$Title','$Type','$Priority','$Status','$Date','$Description')";
+            $sql = mysqli_query($connection,$requite);
+            $_SESSION['message'] = "Task has been added successfully !";
+            header('location: index.php');
+        }
+        
+    }
+
+    function updateTask()
+    {
+        global $connection;
+        //CODE HERE
+        if(empty($_POST['task-title']) || empty($_POST['task-type']) || empty($_POST['task-priority']) || empty($_POST['task-status']) || empty($_POST['task-date']) || empty($_POST['task-description'])){
+            $_SESSION['erreur'] = "Task Not Add !!! All is required !";
             header('location: index.php');
         }else{
-            $_SESSION['erreur'] = "Task not !!! has been updated successfully !";
-            header('location: index.php');
+            if(isset($_POST['id'])){
+                $id = $_POST['id'];
+                $Title = Validation($_POST['task-title']);
+                $Type = $_POST['task-type'];
+                $Priority = $_POST['task-priority'];
+                $Status = $_POST['task-status'];
+                $Date = $_POST['task-date'];
+                $Description = Validation($_POST['task-description']);
+                //SQL UPDATE
+                $sql = "UPDATE `tasks` SET `Title` = '$Title' ,`Type_id` = '$Type' ,`Priority_id` = '$Priority',`Status_id`= '$Status' ,`Date` = '$Date' ,`Description` = '$Description'  WHERE Id = $id";
+                $res = mysqli_query($connection,$sql); 
+                $_SESSION['message'] = "Task has been updated successfully !";
+                header('location: index.php');
+            }else{
+                $_SESSION['erreur'] = "Erreur id undefined !!!!";
+                header('location: index.php');
+            }
         }
     }
 
@@ -107,26 +116,30 @@
 		    header('location: index.php');
         }
         else{
-            $_SESSION['erreur'] = "Task has !!!!! not been deleted successfully !";
+            $_SESSION['erreur'] = "Erreur id undefined !!!!";
 		    header('location: index.php');
         }
     }
 
+    //function Ajouter Types (dynamic) 
     function Types(){
         global $connection;
+        //SQL Afficher les types
         $sql ="SELECT * FROM `types`";
         $res = mysqli_query($connection,$sql);
         while ($row = mysqli_fetch_assoc($res)) { ?>
         <div class="form-check mb-1">
-            <input class="form-check-input" name="task-type" type="radio" value="<?php echo $row['Id']?>" id="task_type_feature" required="" data-parsley-trigger="keyup"/>
+            <input class="form-check-input" name="task-type" type="radio" value="<?php echo $row['Id']?>" id="task_type_feature" data-parsley-required data-parsley-trigger="keyup"/>
             <label class="form-check-label" for="task-type-feature"><?php echo $row['Name']?></label>
         </div>
         <?php
         }
     }
-
+    
+    //function Ajouter Status et Priority (dynamic) 
     function Select($table){
         global $connection;
+        //SQL Afficher les statuses et priorityes
         $sql ="SELECT * FROM `$table`";
         $res = mysqli_query($connection,$sql);
         while ($row = mysqli_fetch_assoc($res)) { ?>
@@ -135,18 +148,10 @@
         }
     }
 
-    // function Status(){
-    //     global $connection;
-    //     $sql ="SELECT * FROM `statuses`";
-    //     $res = mysqli_query($connection,$sql);
-    //     while ($row = mysqli_fetch_assoc($res)) { ?>
-    <!-- //     <option value="<?php //echo $row['Id']?>"><?php //echo $row['Name']?></option> -->
-    //     <?php
-    //     }
-    // }
-
+    //function Calculer Count de table
     function Counts($id){
         global $connection;
+        //SQL Calculer Count de table
         $sql="SELECT count(*) FROM `tasks` WHERE Status_id = '$id'";
         $res = mysqli_query($connection,$sql);
         $nbr= mysqli_fetch_array($res);
@@ -154,8 +159,15 @@
     } 
 
 
-    
+    function recherche($string){
+        global $connection;
+        $sql = "SELECT * FROM `task` where Title like '$string'";
+        $res = mysqli_query($connection,$sql);
+        while ($row = mysqli_fetch_assoc($res)) { ?>
+            
+        <?php
+        } 
+    }
 
-    
 
 ?>

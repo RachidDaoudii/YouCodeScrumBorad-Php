@@ -16,7 +16,6 @@
 	<!-- ================== BEGIN core-css ================== -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
-	<link href="assets/css/parsley.css" rel="stylesheet" />
 	<link href="assets/css/default/app.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
 	<!-- ================== END core-css ================== -->
@@ -133,7 +132,7 @@
 						<a href="javascript:;" class="dropdown-item">Calendar</a>
 						<a href="javascript:;" class="dropdown-item">Setting</a>
 						<div class="dropdown-divider"></div>
-						<a href="javascript:;" class="dropdown-item">Log Out</a>
+						<a href="javascript:; login.php" class="dropdown-item">Log Out</a>
 					</div>
 				</div>
 			</div>
@@ -226,7 +225,7 @@
 				</div>
 				
 				<div class="ms-auto">
-				<a href="#modal_task" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
+				<a href="#modal_task" id="add" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
 				</div>
 			</div>
 			
@@ -265,16 +264,10 @@
 				</div>
 			<?php endif ?>
 			<div class="row">
-					
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<?php
-								// $sql ="SELECT count(*) as Count FROM `tasks` where Status_id ='1'";
-								// $res = mysqli_query($connection,$sql);
-								// $nbr = mysqli_fetch_assoc($res);
-							?>
-							<h4 class="panel-title">To do (<span id="to-do-tasks-count"><?php Counts(1)?></span>)</h4>
+							<h4 class="panel-title">To do (<span id="to-do-tasks-count"><?php Counts(1) ?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -295,11 +288,6 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-						<?php 
-								// $sql="SELECT count(*) AS COUNT FROM `tasks` WHERE Status_id = '2'";
-								// $res = mysqli_query($connection,$sql);
-								// $nbr= mysqli_fetch_assoc($res);
-							?>
 							<h4 class="panel-title">In Progress (<span id="in-progress-tasks-count"><?php Counts(2)?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
@@ -321,11 +309,6 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<?php 
-								// $sql="SELECT count(*) AS COUNT FROM `tasks` WHERE Status_id = '3'";
-								// $res = mysqli_query($connection,$sql);
-								// $nbr= mysqli_fetch_assoc($res);
-							?>
 							<h4 class="panel-title">Done (<span id="done-tasks-count"><?php Counts(3)?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
@@ -353,63 +336,49 @@
 	</div>
 	<!-- END #app -->
 	<!-- TASK MODAL -->
-	<div class="modal fixed" id="modal_task">
+	<div class="modal fade" id="modal_task">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="scripts.php" method="POST" id="form-task">
+				<form action="scripts.php" method="POST" id="form_task">
 					<div class="modal-header">
 						<h5 class="modal-title" id="mode_modal">Add Task</h5>
 						<a href="#" class="btn-close" data-bs-dismiss="modal"></a>
 					</div>
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
-							<input type="hidden" id="task_id" value="" name="id">
+							<input type="hidden" id="task_id" value="" name="id" >
 							<div class="mb-3">
 								<label class="form-label">Title</label>
-								<input type="text" name="task-title" class="form-control" id="task_title" value="" required="" placeholder="Title" data-parsley-patter="^[a-zA-Z]{4}+$" data-parsley-trigger="keyup" />
+								<input type="text" name="task-title" class="form-control" id="task_title" value="" data-parsley-minlength="20" data-parsley-trigger="keyup"/>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
 								<div class="ms-3">
-								<?php Types() ?>
-									<!-- <div class="form-check mb-1">
-										<input class="form-check-input" name="task-type" type="radio" value="1" id="task_type_feature" required data-parsley-trigger="keyup"/>
-										<label class="form-check-label" for="task-type-feature">Feature</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" required name="task-type" type="radio" value="2" id="task_type_bug" data-parsley-trigger="keyup"/>
-										<label class="form-check-label" for="task-type-bug">Bug</label>
-									</div> -->
+									<?php Types() ?>
 								</div>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Priority</label>
-								<select class="form-select" id="task_priority" name="task-priority" required="" data-parsley-trigger="keyup">
+								<select class="form-select" data-parsley-required id="task_priority" name="task-priority" data-parsley-required data-parsley-trigger="keyup">
 									<option value="">Please select</option>
-									<?php Select('priorities')?>
-									<!-- <option value="1">Low</option>
-									<option value="2">Medium</option>
-									<option value="3">High</option>
-									<option value="4">Critical</option> -->
+									<?php Select('priorites') ?>
 								</select>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Status</label>
-								<select class="form-select" id="task_status" name="task-status" required="" data-parsley-trigger="keyup">
+								<select class="form-select" data-parsley-required id="task_status" name="task-status" data-parsley-required data-parsley-trigger="keyup">
 									<option value="">Please select</option>
+									
 									<?php Select('statuses') ?>
-									<!-- 									
-									<option value="2">In Progress</option>
-									<option value="3">Done</option> -->
 								</select>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Date</label>
-								<input type="date" class="form-control" id="task_date" name="task-date" value="" required="" data-parsley-trigger="keyup"/>
+								<input type="date" class="form-control" id="task_date" name="task-date" value="" data-parsley-required data-parsley-required data-parsley-trigger="keyup"/>
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="10" id="task_description" name="task-description" data-parsley-patter="^[a-zA-Z]+$" required="" data-parsley-trigger="keyup" data-parsley-minlength="40"></textarea>
+								<textarea class="form-control" rows="10" id="task_description" name="task-description" data-parsley-required data-parsley-minlength="50" data-parsley-required data-parsley-trigger="keyup"></textarea>
 							</div>
 					</div>
 					<div class="modal-footer">
@@ -428,7 +397,8 @@
 	<script src="assets/js/vendor.min.js"></script>
 	<script src="assets/js/app.min.js"></script>
 	<script src="assets/js/parsley.js"></script>
-	<script src="https://parsleyjs.org/dist/parsley.js"></script>
+	<script src="assets/js/parsley.min.js"></script>
+	<!-- <script src="https://parsleyjs.org/dist/parsley.js"></script> -->
 	<!-- ================== END core-js ================== -->
 </body>
 </html>
