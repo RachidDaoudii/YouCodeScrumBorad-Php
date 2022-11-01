@@ -3,7 +3,12 @@
     include('database.php');
 	global $connection;
 ?>
-
+<?php
+	if(!isset($_SESSION["user_name"])){
+		header("location: login.php");
+		exit;
+	}
+?>
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -119,7 +124,7 @@
 					<a href="#" class="navbar-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
 						<img src="assets/img/user/user-13.jpg" alt="" /> 
 						<span>
-							<span class="d-none d-md-inline">Jilali Smith</span>
+							<span class="d-none d-md-inline"><?php echo $_SESSION['user_name']; ?></span>
 							<b class="caret"></b>
 						</span>
 					</a>
@@ -132,7 +137,7 @@
 						<a href="javascript:;" class="dropdown-item">Calendar</a>
 						<a href="javascript:;" class="dropdown-item">Setting</a>
 						<div class="dropdown-divider"></div>
-						<a href="javascript:; login.php" class="dropdown-item">Log Out</a>
+						<a href="javascript:; login.php" class="dropdown-item" onclick="<?php header('Location: index.php');?>"> Log Out</a>
 					</div>
 				</div>
 			</div>
@@ -155,7 +160,9 @@
 							<div class="menu-profile-info">
 								<div class="d-flex align-items-center">
 									<div class="flex-grow-1">
-										Jilali Smith
+									<?php 
+										echo $_SESSION['user_name']; 
+									?>
 									</div>
 									<div class="menu-caret ms-auto"></div>
 								</div>
@@ -253,15 +260,16 @@
 					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
 				</div>
 			<?php endif ?>
-				<?php if(isset($_SESSION['erreur'])):  ?>
-					<div class="alert alert-red alert-dismissible fade show">
-					<strong>Success!</strong>
-					<?php 
-						echo $_SESSION['erreur']; 
-						unset($_SESSION['erreur']);
-					?>
-					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
-				</div>
+			<!-- session erreur -->
+			<?php if(isset($_SESSION['erreur'])):  ?>
+				<div class="alert alert-red alert-dismissible fade show">
+				<strong>Success!</strong>
+				<?php 
+					echo $_SESSION['erreur']; 
+					unset($_SESSION['erreur']);
+				?>
+				<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
+			</div>
 			<?php endif ?>
 			<div class="row">
 				<div class="col-xl-4 col-lg-6">
@@ -349,7 +357,7 @@
 							<input type="hidden" id="task_id" value="" name="id" >
 							<div class="mb-3">
 								<label class="form-label">Title</label>
-								<input type="text" name="task-title" class="form-control" id="task_title" value="" data-parsley-minlength="20" data-parsley-trigger="keyup"/>
+								<input type="text" name="task-title" class="form-control" id="task_title" value="" data-parsley-required data-parsley-minlength="20" data-parsley-trigger="keyup"/>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
@@ -368,7 +376,6 @@
 								<label class="form-label">Status</label>
 								<select class="form-select" data-parsley-required id="task_status" name="task-status" data-parsley-required data-parsley-trigger="keyup">
 									<option value="">Please select</option>
-									
 									<?php Select('statuses') ?>
 								</select>
 							</div>
@@ -391,7 +398,6 @@
 			</div>
 		</div>
 	</div>
-	
 	<!-- ================== BEGIN core-js ================== -->
 	<script src="scripts.js"></script>
 	<script src="assets/js/vendor.min.js"></script>

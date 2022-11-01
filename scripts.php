@@ -2,13 +2,15 @@
     //INCLUDE DATABASE FILE
     include('database.php');
 
-    //SESSSION IS A WAY TO STORE DATA TO BE USED ACROSS MULTIPLE PAGES
+    //SESSSION IS A WAY TO STORE DATA TO BE USED ACROSS MULTIPLE PAGES 
     session_start();
 
     //ROUTING
     if(isset($_POST['save']))        saveTask();
     if(isset($_POST['update']))      updateTask();
     if(isset($_POST['delete']))      deleteTask();
+    if(isset($_POST['login']))       login();
+    if(isset($_POST['connecter']))   connecter();
 
     
 
@@ -159,14 +161,40 @@
     } 
 
 
-    function recherche($string){
+    function login(){
         global $connection;
-        $sql = "SELECT * FROM `task` where Title like '$string'";
+        $nom = Validation($_POST['login_nom']);
+        $prenom = Validation($_POST['login_prenom']);
+        $email = Validation($_POST['login_email']);
+        $password = Validation($_POST['login_password']);
+        $sql ="INSERT INTO `user_compte`(`Nom`, `Prenom`, `Email`, `Password`) VALUES ('$nom','$prenom','$email','$password')";
         $res = mysqli_query($connection,$sql);
-        while ($row = mysqli_fetch_assoc($res)) { ?>
-            
-        <?php
-        } 
+        // $row = mysqli_fetch_assoc($res);
+        // $_SESSION['user_name']= $row['Nom'];
+        header("Location: index.php");
+    }
+
+    function connecter(){
+        global $connection;
+        $email = Validation($_POST['login_email']);
+        $password = Validation($_POST['login_password']);
+        $sql="SELECT * from `user_compte` WHERE Email = '$email' and Password = '$password'";
+        $res = mysqli_query($connection,$sql);
+        if (mysqli_num_rows($res) === 1) {
+            $row = mysqli_fetch_assoc($res);
+            if ($row['Email'] === $email && $row['Password'] === $password) {
+                $_SESSION['user_name'] = $row['Nom'].' '.$row['Prenom'];
+                header("Location: index.php");
+            }
+            else{
+                $_SESSION['erreur'] = "Erreur de traitement !!!!";
+		        header('location: login.php');
+            }
+        }
+        else{
+            $_SESSION['erreur'] = "Erreur Email Password!!!!";
+		    header('location: login.php');
+        }
     }
 
 
