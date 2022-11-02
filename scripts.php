@@ -11,7 +11,6 @@
     if(isset($_POST['delete']))      deleteTask();
     if(isset($_POST['login']))       login();
     if(isset($_POST['connecter']))   connecter();
-
     
 
     function getTasks($column)
@@ -40,17 +39,20 @@
             </button>
             <?php 
         } 
+        // return $element;
         // echo "Fetch all tasks";
     }
 
     //function Validation form modal 
     function Validation($input){
-        //Supprime les espaces
+        //Supprime les espaces debut et fin
         $input = trim($input);
         //Supprimer quote string (\n \t \)
         $input = stripcslashes($input);
         //Convertit les balise html en string
         $input = htmlspecialchars($input);
+        //Supprime les espaces center 
+        $input = preg_replace('/\s+/', ' ', $input);
         return $input;
     }
 
@@ -167,10 +169,9 @@
         $prenom = Validation($_POST['login_prenom']);
         $email = Validation($_POST['login_email']);
         $password = Validation($_POST['login_password']);
+        // $md5password = md5($password);
         $sql ="INSERT INTO `user_compte`(`Nom`, `Prenom`, `Email`, `Password`) VALUES ('$nom','$prenom','$email','$password')";
         $res = mysqli_query($connection,$sql);
-        // $row = mysqli_fetch_assoc($res);
-        // $_SESSION['user_name']= $row['Nom'];
         header("Location: index.php");
     }
 
@@ -184,6 +185,7 @@
             $row = mysqli_fetch_assoc($res);
             if ($row['Email'] === $email && $row['Password'] === $password) {
                 $_SESSION['user_name'] = $row['Nom'].' '.$row['Prenom'];
+                $_SESSION['id'] = $row['id'];
                 header("Location: index.php");
             }
             else{
@@ -196,6 +198,5 @@
 		    header('location: login.php');
         }
     }
-
 
 ?>

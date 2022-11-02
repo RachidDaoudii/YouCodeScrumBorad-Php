@@ -4,7 +4,7 @@
 	global $connection;
 ?>
 <?php
-	if(!isset($_SESSION["user_name"])){
+	if(!isset($_SESSION["user_name"]) && !isset($_SESSION['id'])){
 		header("location: login.php");
 		exit;
 	}
@@ -137,7 +137,7 @@
 						<a href="javascript:;" class="dropdown-item">Calendar</a>
 						<a href="javascript:;" class="dropdown-item">Setting</a>
 						<div class="dropdown-divider"></div>
-						<a href="javascript:; login.php" class="dropdown-item" onclick="<?php header('Location: index.php');?>"> Log Out</a>
+						<a href="logout.php" class="dropdown-item">Log Out</a>
 					</div>
 				</div>
 			</div>
