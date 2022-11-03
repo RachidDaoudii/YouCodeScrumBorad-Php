@@ -28,7 +28,7 @@
         <!-- session erreur -->
 			<?php if(isset($_SESSION['erreur'])):  ?>
 				<div class="alert alert-red alert-dismissible fade show">
-				<strong>Success!</strong>
+				<strong>Erreur!</strong>
 				<?php 
 					echo $_SESSION['erreur']; 
 					unset($_SESSION['erreur']);
@@ -41,12 +41,12 @@
             <form action="scripts.php" method="post">
                 <h3 class="mb-5">Sign in</h3>
                 <div class="form-outline mb-4">
-                    <input type="email" name="login_email" id="typeEmailX-2" class="form-control form-control-lg" data-parsley-required data-parsley-trigger="keyup" />
-                    <label class="form-label" for="typeEmailX-2">Email</label>
+                    <input type="email" name="login_email" placeholder="Email" id="typeEmailX-2" class="form-control form-control-lg" data-parsley-required data-parsley-trigger="keyup" />
+                    <!-- <label class="form-label" for="typeEmailX-2"></label> -->
                 </div>
                 <div class="form-outline mb-4">
-                    <input type="password" id="typePasswordX-2" name="login_password" class="form-control form-control-lg" data-parsley-required data-parsley-trigger="keyup" />
-                    <label class="form-label" for="typePasswordX-2">Password</label>
+                    <input type="password" id="typePasswordX-2" placeholder="Password" name="login_password" class="form-control form-control-lg" data-parsley-required data-parsley-trigger="keyup" />
+                    <!-- <label class="form-label" for="typePasswordX-2"></label> -->
                 </div>
 				<button type="submit" name="connecter" class="btn btn-primary" id="ctn-btn">Se connecter</button>
             </form><br>
@@ -103,7 +103,7 @@
 	<script src="assets/js/app.min.js"></script>
 	<script src="assets/js/parsley.js"></script>
 	<script src="assets/js/parsley.min.js"></script>
-	<!-- <script src="https://parsleyjs.org/dist/parsley.js"></script> -->
+	<script src="https://parsleyjs.org/dist/parsley.js"></script>
 	<!-- ================== END core-js ================== -->
 </body>
 </html>

@@ -21,7 +21,7 @@
         $requite = "SELECT types.Name as NameTypes ,priorites.Name as NamePriority, statuses.Name AS NameStatus ,tasks.* FROM tasks ,types ,priorites , statuses WHERE tasks.Type_id = types.Id and tasks.Priority_id = priorites.Id and tasks.Status_id = statuses.Id and tasks.Status_id= $column ORDER BY tasks.Id ASC";
         $sql = mysqli_query($connection,$requite);
         while ($element = mysqli_fetch_assoc($sql)){?>
-            <button status="<?php echo $element['Status_id'] ?>" class="w-100 bg-white border-0 border-secondary border-bottom d-flex btnUpdate" id="<?php echo $element['Id'] ?>" onclick="rern(<?php echo $element['Id'] ?>)" data-bs-toggle="modal" data-bs-target="#modal_task">
+            <button status="<?php echo $element['Status_id'] ?>" class="w-100 bg-white border-0 border-secondary border-bottom d-flex btnUpdate" id="<?php echo $element['Id'] ?>" onclick="rern(<?php echo $element['Id'] ?>);aff()" data-bs-toggle="modal" data-bs-target="#modal_task">
                 <div class="fs-2">
                     <i class='bx <?php echo ($element['Status_id'] == 1)? "bx-help-circle" : (($element['Status_id'] == 2)? "bx-loader-alt" : "bx-check-circle")?>' style='color:#00d68a'></i> 
                 </div>
@@ -160,19 +160,23 @@
         $res = mysqli_query($connection,$sql);
         $nbr= mysqli_fetch_array($res);
         echo $nbr[0];
-    } 
-
+    }
 
     function login(){
         global $connection;
-        $nom = Validation($_POST['login_nom']);
-        $prenom = Validation($_POST['login_prenom']);
-        $email = Validation($_POST['login_email']);
-        $password = Validation($_POST['login_password']);
-        // $md5password = md5($password);
-        $sql ="INSERT INTO `user_compte`(`Nom`, `Prenom`, `Email`, `Password`) VALUES ('$nom','$prenom','$email','$password')";
-        $res = mysqli_query($connection,$sql);
-        header("Location: index.php");
+        if(empty($_POST['login_nom']) || empty($_POST['login_prenom']) || empty($_POST['login_email']) || empty($_POST['login_password']) ){
+            $_SESSION['erreur'] = "Erreur!!!!";
+		    header('location: login.php');
+        }else{
+            $nom = Validation($_POST['login_nom']);
+            $prenom = Validation($_POST['login_prenom']);
+            $email = Validation($_POST['login_email']);
+            $password = Validation($_POST['login_password']);
+            // $md5password = md5($password);
+            $sql ="INSERT INTO `user_compte`(`Nom`, `Prenom`, `Email`, `Password`) VALUES ('$nom','$prenom','$email','$password')";
+            $res = mysqli_query($connection,$sql);
+            header("Location: index.php");
+        }
     }
 
     function connecter(){
@@ -189,12 +193,12 @@
                 header("Location: index.php");
             }
             else{
-                $_SESSION['erreur'] = "Erreur de traitement !!!!";
+                $_SESSION['erreur'] = "de traitement !!!!";
 		        header('location: login.php');
             }
         }
         else{
-            $_SESSION['erreur'] = "Erreur Email Password!!!!";
+            $_SESSION['erreur'] = "Email Password!!!!";
 		    header('location: login.php');
         }
     }

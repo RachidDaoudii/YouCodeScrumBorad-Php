@@ -22,22 +22,25 @@ function rern(id){
     document.getElementById('task_description').value = description;
 }
 //reset form modal et change mode de modal (Add task -> Update task)
-let rest = document.getElementById('add');
-rest.addEventListener('click',function(){
+let add = document.getElementById('add');
+add.addEventListener('click',function(){
     document.getElementById('form_task').reset();
-    document.getElementById('mode_modal').innerText="Add Task";    
+    document.getElementById('mode_modal').innerText="Add Task";
+    document.getElementById('task-delete-btn').style.display="none";
+    document.getElementById('task-update-btn').style.display="none";
+    document.getElementById('task-save-btn').style.display="block";
 })
 
-let btnUpdate =document.querySelector('.btnUpdate');
-btnUpdate.addEventListener('click',function (){
+function aff(){
+    $('#form_task').parsley().reset();
     document.getElementById('mode_modal').innerText="Update Task";
-})
+    document.getElementById('task-delete-btn').style.display="block";
+    document.getElementById('task-update-btn').style.display="block";
+    document.getElementById('task-save-btn').style.display="none";
+}
 
 
-//validation parsley
-$(document).ready(function(){
-    $('#form_task').parsley();
-});
+
 
 
 

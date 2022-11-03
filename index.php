@@ -404,7 +404,7 @@
 	<script src="assets/js/app.min.js"></script>
 	<script src="assets/js/parsley.js"></script>
 	<script src="assets/js/parsley.min.js"></script>
-	<!-- <script src="https://parsleyjs.org/dist/parsley.js"></script> -->
+	<script src="https://parsleyjs.org/dist/parsley.js"></script>
 	<!-- ================== END core-js ================== -->
 </body>
 </html>
